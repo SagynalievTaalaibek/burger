@@ -18,6 +18,7 @@ interface Ingredient {
 interface CountIngredient {
   name: string;
   count: number;
+  price: number;
   id: number;
 }
 const App = () => {
@@ -29,21 +30,34 @@ const App = () => {
   ];
 
   const countIngredients = INGREDIENTS.reduce<CountIngredient[]>((acc, ingredient) => {
-     acc.push({name: ingredient.name, count: ingredient.count, id: ingredient.id});
+     acc.push({
+       id: ingredient.id,
+       name: ingredient.name,
+       count: ingredient.count,
+       price: ingredient.price,
+     });
     return acc;
   }, []);
 
+
   const [ingredients, setIngredients] = useState(countIngredients);
+
+  const sumIngredients = ingredients.reduce((acc, ingredient) => {
+    return acc + ingredient.count * ingredient.price;
+  }, 0);
+
 
   const changeCountIngredient = (id: number) => {
     setIngredients((prevState) => prevState.map((ingredient) => {
       if (ingredient.id === id) {
+        // setSumIngredients((prevState) => prevState + ingredient.price);
         return {...ingredient, count: ingredient.count + 1};
       }
 
       return ingredient;
     }));
   };
+
 
   const deleteIngredient = (id: number) => {
     setIngredients((prevState) => prevState.map((ingredient) => {
@@ -86,7 +100,7 @@ const App = () => {
           <div className="Meat"></div>
           <div className="BreadBottom"></div>
         </div>
-        <span className="price">Price: 150</span>
+        <span className="price">Price: {sumIngredients} som</span>
       </div>
     </div>
   );
