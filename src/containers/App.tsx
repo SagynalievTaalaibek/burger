@@ -1,10 +1,10 @@
+import {useState} from 'react';
+import Ingredients from '../components/Ingredients/Ingredients';
 import meatImage from '../assets/meat.png';
 import cheeseImage from '../assets/cheese.png';
 import saladImage from '../assets/salad.png';
 import baconImage from '../assets/bacon.png';
-import Ingredients from '../components/Ingredients/Ingredients';
 import './App.css';
-import {useState} from 'react';
 
 
 interface Ingredient {
@@ -18,6 +18,7 @@ interface Ingredient {
 interface CountIngredient {
   name: string;
   count: number;
+  id: number;
 }
 const App = () => {
   const INGREDIENTS: Ingredient[] = [
@@ -28,26 +29,36 @@ const App = () => {
   ];
 
   const countIngredients = INGREDIENTS.reduce<CountIngredient[]>((acc, ingredient) => {
-     acc.push({name: ingredient.name, count: ingredient.count});
+     acc.push({name: ingredient.name, count: ingredient.count, id: ingredient.id});
     return acc;
   }, []);
 
   const [ingredients, setIngredients] = useState(countIngredients);
 
+  const changeCountIngredient = (id: number) => {
+    setIngredients((prevState) => prevState.map((ingredient) => {
+      if (ingredient.id === id) {
+        return {...ingredient, count: ingredient.count + 1};
+      }
+
+      return ingredient;
+    }));
+  };
 
   console.log(ingredients);
   const deleteIngredient = (id: number) => {
     console.log(id);
   };
 
-  const ingredientList = INGREDIENTS.map((ingredient) => {
+  const ingredientList = INGREDIENTS.map((ingredient, index) => {
     return (
       <Ingredients
         key={ingredient.id}
         name={ingredient.name}
         image={ingredient.image}
-        amount={ingredient.count}
+        amount={ingredients[index].count}
         deleteIngredient={() => deleteIngredient(ingredient.id)}
+        addIngredient={() => changeCountIngredient(ingredient.id)}
       />
     );
   });
