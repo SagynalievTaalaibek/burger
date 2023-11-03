@@ -45,9 +45,14 @@ const App = () => {
     }));
   };
 
-  console.log(ingredients);
   const deleteIngredient = (id: number) => {
-    console.log(id);
+    setIngredients((prevState) => prevState.map((ingredient) => {
+      if (ingredient.id === id && ingredient.count !== 0) {
+        return {...ingredient, count: ingredient.count - 1};
+      }
+
+      return ingredient;
+    }));
   };
 
   const ingredientList = INGREDIENTS.map((ingredient, index) => {
