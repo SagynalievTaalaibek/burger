@@ -1,26 +1,14 @@
 import {useState} from 'react';
+import Burger from '../components/Burger/Burger';
 import Ingredients from '../components/Ingredients/Ingredients';
 import meatImage from '../assets/meat.png';
 import cheeseImage from '../assets/cheese.png';
 import saladImage from '../assets/salad.png';
 import baconImage from '../assets/bacon.png';
+import {CountIngredient, Ingredient} from '../types';
 import './App.css';
 
 
-interface Ingredient {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
-  count: number;
-}
-
-interface CountIngredient {
-  name: string;
-  count: number;
-  price: number;
-  id: number;
-}
 const App = () => {
   const INGREDIENTS: Ingredient[] = [
     {name: 'Meat', price: 80, image: meatImage, id: 1, count: 0},
@@ -44,20 +32,17 @@ const App = () => {
 
   const sumIngredients = ingredients.reduce((acc, ingredient) => {
     return acc + ingredient.count * ingredient.price;
-  }, 0);
-
+  }, 30);
 
   const changeCountIngredient = (id: number) => {
     setIngredients((prevState) => prevState.map((ingredient) => {
       if (ingredient.id === id) {
-        // setSumIngredients((prevState) => prevState + ingredient.price);
         return {...ingredient, count: ingredient.count + 1};
       }
 
       return ingredient;
     }));
   };
-
 
   const deleteIngredient = (id: number) => {
     setIngredients((prevState) => prevState.map((ingredient) => {
@@ -95,9 +80,7 @@ const App = () => {
             <div className="Seeds1"></div>
             <div className="Seeds2"></div>
           </div>
-          <div className="Salad"></div>
-          <div className="Cheese"></div>
-          <div className="Meat"></div>
+          <Burger classIngredients={ingredients}/>
           <div className="BreadBottom"></div>
         </div>
         <span className="price">Price: {sumIngredients} som</span>
